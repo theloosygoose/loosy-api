@@ -23,8 +23,6 @@ custom_headers = {
     'Accept-Encoding': 'gzip, deflate, br',
     'Accept-Language': 'en-US,en;q=0.9',
 }
-
-
 # In[42]:
 nba_teams = teams.get_teams()
 nba_teams_df = pd.DataFrame(nba_teams)
@@ -46,16 +44,21 @@ for i in nba_teams_id:
     
 print(temp_03)
 # In[44]
-
+#get all pbp and filter ejections only
 df = pd.DataFrame()
+df_temp01 = pd.DataFrame()
 
-for i in temp_03:
-    print(i)
-    df = df.append(playbyplay.PlayByPlay(i).get_data_frames()[0])
+def pbp_download(game1, game2):
+    for i in temp_03[game1:game2]:
+        df.append(playbyplay.PlayByPlay(i).get_data_frames()[0])
+        #df_temp01 = df_temp01.query('EVENTMSGTYPE == 11')
 
-df
+pbp_download(0,200)
+#pbp_download(200,400)
+#pbp_download(400,600)
+#pbp_download(600,800)
+print(df_temp01)
 # %%
+df_temp01.to_csv("main.csv")
 
-df_01 = playbyplay.PlayByPlay(temp_03[2]).get_data_frames()[0]
-df_01
 # %%
